@@ -8,7 +8,7 @@ A small, reproducible, privacy-preserving early-warning demo for public-service 
 python3 civicsignal.py
 ```
 
-The command writes `civicsignal_predictions.csv` and prints precision, recall, F1, and the latest alert state. The demo intentionally uses synthetic data so no credentials, personal data, or restricted datasets are required. Replace `make_demo_data` with a licensed city open-data downloader for a real study.
+The command writes `civicsignal_predictions.csv` and prints precision, recall, F1, accuracy, and the latest alert state. Run the regression tests with `python3 -m unittest -v`. A concise model card is included in [`MODEL_CARD.md`](MODEL_CARD.md). The demo intentionally uses synthetic data so no credentials, personal data, or restricted datasets are required. Replace `make_demo_data` with a licensed city open-data downloader for a real study.
 
 ## Method and limitations
 

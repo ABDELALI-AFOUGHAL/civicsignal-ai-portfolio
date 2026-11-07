@@ -45,13 +45,24 @@ def seasonal_score(rows: list[Observation], window: int = 14) -> list[float]:
 
 
 def metrics(labels: list[int], predictions: list[int]) -> dict[str, float]:
+    """Return binary classification metrics, rejecting malformed inputs."""
+    if len(labels) != len(predictions):
+        raise ValueError("labels and predictions must have the same length")
+    if any(value not in (0, 1) for value in [*labels, *predictions]):
+        raise ValueError("labels and predictions must contain only 0 or 1")
     tp = sum(a == b == 1 for a, b in zip(labels, predictions))
+    tn = sum(a == b == 0 for a, b in zip(labels, predictions))
     fp = sum(a == 0 and b == 1 for a, b in zip(labels, predictions))
     fn = sum(a == 1 and b == 0 for a, b in zip(labels, predictions))
     precision = tp / (tp + fp) if tp + fp else 0.0
     recall = tp / (tp + fn) if tp + fn else 0.0
     f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
-    return {"precision": precision, "recall": recall, "f1": f1, "true_positives": tp, "false_positives": fp}
+    accuracy = (tp + tn) / len(labels) if labels else 0.0
+    return {
+        "precision": precision, "recall": recall, "f1": f1, "accuracy": accuracy,
+        "true_positives": tp, "true_negatives": tn,
+        "false_positives": fp, "false_negatives": fn,
+    }
 
 
 def write_csv(rows: list[Observation], scores: list[float], path: Path) -> None:
